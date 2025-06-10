@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
     });
 
-    // Load saved theme from localStorage
     const savedTheme = localStorage.getItem('theme') || 'light';
     applyTheme(savedTheme);
 
@@ -75,20 +74,54 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Core Functions ---
+    /**
+     * Finds student data by seat number from CSV text.
+     * Reads all grades as raw strings to preserve special characters and fractions.
+     */
     function findStudentBySeatNumber(csvText, seatNumber) {
         const rows = csvText.split(/\r?\n/).map(row => row.split(','));
         for (let i = 1; i < rows.length; i++) {
             const row = rows[i];
             if (row && row.length > 0 && row[0].trim() === seatNumber) {
                 return {
-                    seat: row[0].trim(), name: row[1] ? row[1].trim() : 'لا يوجد اسم', school: row[2] ? row[2].trim() : 'لا توجد مدرسة',
-                    arabic: parseFloat(row[3]) || 0, english: parseFloat(row[4]) || 0, social: parseFloat(row[5]) || 0,
-                    algebra: parseFloat(row[6]) || 0, geometry: parseFloat(row[7]) || 0, science: parseFloat(row[8]) || 0,
-                    subTotal: parseFloat(row[9]) || 0, computer: parseFloat(row[10]) || 0, religion: parseFloat(row[11]) || 0, art: parseFloat(row[12]) || 0,
+                    seat: row[0]?.trim() || '',
+                    name: row[1]?.trim() || 'لا يوجد اسم',
+                    school: row[2]?.trim() || 'لا توجد مدرسة',
+                    arabic: row[3]?.trim() || '0',
+                    english: row[4]?.trim() || '0',
+                    social: row[5]?.trim() || '0',
+                    algebra: row[6]?.trim() || '0',
+                    geometry: row[7]?.trim() || '0',
+                    science: row[8]?.trim() || '0',
+                    subTotal: row[9]?.trim() || '0', 
+                    computer: row[10]?.trim() || '0',
+                    religion: row[11]?.trim() || '0',
+                    art: row[12]?.trim() || '0',
                 };
             }
         }
         return null;
+    }
+
+    /**
+     * Helper function to create a single row for the grades table.
+     * It checks if the grade is non-numeric (like 'غ') to add a special class.
+     */
+    function createGradeRow(subjectName, grade, isNonAdditive = false) {
+        const gradeStr = grade.toString();
+        // A grade is considered 'absent' or special if it's not a number after cleaning.
+        const isAbsent = isNaN(parseFloat(gradeStr.replace('٫', '.')));
+        
+        const rowClass = isNonAdditive ? 'non-additive-subject' : '';
+        // The cell gets the 'absent' class if the grade is text.
+        const gradeCellClass = isAbsent ? 'grade-absent' : '';
+
+        return `
+            <tr class="${rowClass}">
+                <td class="subject-name">${subjectName}</td>
+                <td class="${gradeCellClass}">${gradeStr}</td>
+            </tr>
+        `;
     }
 
     function displayResult(data) {
@@ -115,15 +148,15 @@ document.addEventListener('DOMContentLoaded', () => {
                             <tr><th>المادة</th><th>الدرجة</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td class="subject-name">اللغة العربية</td><td>${data.arabic}</td></tr>
-                            <tr><td class="subject-name">اللغة الإنجليزية</td><td>${data.english}</td></tr>
-                            <tr><td class="subject-name">الدراسات الاجتماعية</td><td>${data.social}</td></tr>
-                            <tr><td class="subject-name">الجبر</td><td>${data.algebra}</td></tr>
-                            <tr><td class="subject-name">الهندسة</td><td>${data.geometry}</td></tr>
-                            <tr><td class="subject-name">العلوم</td><td>${data.science}</td></tr>
-                            <tr class="non-additive-subject"><td class="subject-name">الحاسب الآلي</td><td>${data.computer}</td></tr>
-                            <tr class="non-additive-subject"><td class="subject-name">التربية الدينية</td><td>${data.religion}</td></tr>
-                            <tr class="non-additive-subject"><td class="subject-name">التربية الفنية</td><td>${data.art}</td></tr>
+                            ${createGradeRow('اللغة العربية', data.arabic)}
+                            ${createGradeRow('اللغة الإنجليزية', data.english)}
+                            ${createGradeRow('الدراسات الاجتماعية', data.social)}
+                            ${createGradeRow('الجبر', data.algebra)}
+                            ${createGradeRow('الهندسة', data.geometry)}
+                            ${createGradeRow('العلوم', data.science)}
+                            ${createGradeRow('الحاسب الآلي', data.computer, true)}
+                            ${createGradeRow('التربية الدينية', data.religion, true)}
+                            ${createGradeRow('التربية الفنية', data.art, true)}
                         </tbody>
                     </table>
                 </div>
@@ -138,7 +171,9 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             
             <div class="d-grid mt-4">
-                <button onclick="window.location.reload()" class="btn btn-secondary btn-lg"><i class="bi bi-arrow-repeat me-2"></i>البحث عن رقم جلوس آخر</button>
+                <button onclick="window.location.reload()" class="btn btn-secondary btn-lg">
+                    <i class="bi bi-arrow-repeat me-2"></i>البحث عن رقم جلوس آخر
+                </button>
             </div>
         `;
 
