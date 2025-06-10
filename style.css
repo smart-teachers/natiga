@@ -1,0 +1,219 @@
+/* --- Google Font Import --- */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
+
+/* --- CSS Variables for Theming --- */
+:root {
+    --bg-gradient-start: #e0eafc;
+    --bg-gradient-end: #cfdef3;
+    --card-bg: rgba(255, 255, 255, 0.7);
+    --card-border: rgba(255, 255, 255, 0.2);
+    --card-shadow: rgba(31, 38, 135, 0.15);
+    --header-bg: #4a69bd;
+    --text-color: #333;
+    --footer-text-color: #555;
+    --primary-color: #4a69bd;
+    --primary-hover: #3b5998;
+    --section-bg: #fff;
+    --info-label-color: #555;
+    --info-border-color: #f0f0f0;
+    --non-additive-bg: #e8eaf6;
+    --non-additive-text: #3f51b5;
+    --non-additive-border: #7986cb;
+}
+
+body.dark-theme {
+    --bg-gradient-start: #232526;
+    --bg-gradient-end: #414345;
+    --card-bg: rgba(40, 40, 40, 0.7);
+    --card-border: rgba(255, 255, 255, 0.1);
+    --card-shadow: rgba(0, 0, 0, 0.3);
+    --header-bg: #3c4a83;
+    --text-color: #f0f0f0;
+    --footer-text-color: #aaa;
+    --primary-color: #5d78d0;
+    --primary-hover: #7b94e8;
+    --section-bg: #2d2d2d;
+    --info-label-color: #bbb;
+    --info-border-color: #444;
+    --non-additive-bg: #303348;
+    --non-additive-text: #a8b2f5;
+    --non-additive-border: #5d78d0;
+}
+
+/* --- General Styles --- */
+body {
+    font-family: 'Cairo', sans-serif;
+    background: linear-gradient(to top left, var(--bg-gradient-start), var(--bg-gradient-end));
+    min-height: 100vh;
+    padding: 1.5rem 0;
+    transition: background 0.5s ease;
+}
+
+.main-container {
+    width: 100%;
+    max-width: 800px;
+    margin: auto;
+    padding: 0 1rem;
+}
+
+/* --- Theme Switcher --- */
+.theme-switcher-container {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1000;
+}
+.theme-switcher {
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: var(--text-color);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+.theme-switcher:hover {
+    transform: scale(1.1);
+}
+.theme-switcher .bi-sun-fill { display: none; }
+body.dark-theme .theme-switcher .bi-sun-fill { display: inline-block; }
+body.dark-theme .theme-switcher .bi-moon-stars-fill { display: none; }
+
+/* --- Card Styles --- */
+.card {
+    background: var(--card-bg);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    box-shadow: 0 8px 32px 0 var(--card-shadow);
+    color: var(--text-color);
+    transition: background 0.5s ease, color 0.5s ease;
+}
+.card-header.main-header {
+    background-color: var(--header-bg);
+    color: white;
+    border-bottom: none;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    padding: 1.5rem;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    transition: background-color 0.5s ease;
+}
+.search-frame {
+    padding: 2rem;
+}
+.form-label {
+    font-weight: 700;
+    color: var(--text-color);
+    font-size: 1.2rem;
+}
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+.footer-credit {
+    margin-top: 2rem;
+    color: var(--footer-text-color);
+    font-size: 0.9rem;
+    transition: color 0.5s ease;
+}
+
+/* --- Result Display Styles --- */
+#resultDisplay.fade-in {
+    animation: fadeIn 0.8s ease-in-out;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.student-data-section {
+    background: var(--section-bg);
+    padding: 1.5rem;
+    border-radius: 0.8rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: background-color 0.5s ease;
+}
+.info-row {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+    align-items: center;
+    font-size: 1.1rem;
+    padding: 0.6rem 0.5rem;
+    border-bottom: 1px solid var(--info-border-color);
+}
+.info-row:last-child { border-bottom: none; }
+.info-row span {
+    font-weight: 600;
+    color: var(--info-label-color);
+    white-space: nowrap;
+}
+.info-row strong {
+    text-align: right;
+}
+.grades-table {
+    font-size: 1.1rem;
+    margin-top: 1rem;
+}
+.non-additive-subject td {
+    background-color: var(--non-additive-bg) !important;
+    color: var(--non-additive-text);
+    font-style: italic;
+    transition: all 0.5s ease;
+}
+.non-additive-subject td:first-child {
+    border-right: 4px solid var(--non-additive-border);
+}
+.non-additive-subject .subject-name {
+    font-weight: 700;
+}
+.total-score-row {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1.25rem;
+    border-radius: 0.8rem;
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    transition: background-color 0.5s ease;
+}
+.total-score-row .label {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+.fraction {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    font-family: 'Cairo', sans-serif;
+    font-weight: 800;
+}
+.fraction-numerator {
+    display: block;
+    font-size: 2.2rem;
+    border-bottom: 3px solid rgba(255, 255, 255, 0.7);
+    padding: 0 1rem 0.2rem 1rem;
+    line-height: 1;
+}
+.fraction-denominator {
+    display: block;
+    font-size: 1.6rem;
+    padding-top: 0.4rem;
+    opacity: 0.9;
+}
